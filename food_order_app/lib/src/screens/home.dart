@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:food_order_app/src/commons.dart';
+import 'package:food_order_app/src/helpers/screen_navigation.dart';
+import 'package:food_order_app/src/helpers/style.dart';
+import 'package:food_order_app/src/screens/bag.dart';
 import 'package:food_order_app/src/widgets/bottom_navigation_icon.dart';
 import 'package:food_order_app/src/widgets/categories.dart';
 import 'package:food_order_app/src/widgets/custom_text.dart';
@@ -239,6 +241,9 @@ class _HomeState extends State<Home> {
                 name: "Near by",
               ),
               BottomNavIcon(
+                onTap: (){
+                  changeScreen(context, ShoppingBag());
+                },
                 image: "shopping-bag.png",
                 name: "Cart",
               ),
@@ -251,5 +256,5 @@ class _HomeState extends State<Home> {
         ),
       ),
     );
-   }
+  }
 }
