@@ -4,7 +4,7 @@
 ---- This is for back-end ----
 FOOD DELIVERY COURSE TASKS
 
-TASKS;
+TASKS
  - Update the data provided on user signup
 
 Create collections
