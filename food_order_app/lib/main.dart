@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.red,
         ),
-        home: LoginScreen(),
+        home: ScreensController(),
       ),
     );
   }
@@ -43,7 +43,6 @@ class ScreensController extends StatelessWidget {
     final auth = Provider.of<AuthProvider>(context);
     switch (auth.status) {
       case Status.Uninitialized:
-        return Loading();
       case Status.Unauthenticated:
       case Status.Authenticating:
         return LoginScreen();

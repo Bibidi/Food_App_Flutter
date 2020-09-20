@@ -1,12 +1,15 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:food_order_app/src/helpers/screen_navigation.dart';
 import 'package:food_order_app/src/helpers/style.dart';
+import 'package:food_order_app/src/providers/auth.dart';
 import 'package:food_order_app/src/screens/bag.dart';
 import 'package:food_order_app/src/widgets/bottom_navigation_icon.dart';
 import 'package:food_order_app/src/widgets/categories.dart';
 import 'package:food_order_app/src/widgets/custom_text.dart';
 import 'package:food_order_app/src/widgets/featured_products.dart';
 import 'package:food_order_app/src/widgets/small_floating_button.dart';
+import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -16,68 +19,134 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
+    final authProvider = Provider.of<AuthProvider>(context);
     return Scaffold(
+      appBar: AppBar(
+        iconTheme: IconThemeData(color: white),
+        elevation: 0.5,
+        backgroundColor: primary,
+        title: CustomText(
+          text: "FoodApp",
+          color: white,
+        ),
+        actions: [
+          Stack(
+            children: [
+              IconButton(
+                icon: Icon(Icons.shopping_cart),
+                onPressed: () {
+                  changeScreen(context, ShoppingBag());
+                },
+              ),
+              Positioned(
+                  top: 12,
+                  right: 12,
+                  child: Container(
+                    height: 10,
+                    width: 10,
+                    decoration: BoxDecoration(
+                      color: green,
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                  )),
+            ],
+          ),
+          Stack(
+            children: [
+              IconButton(icon: Icon(Icons.notifications), onPressed: () {}),
+              Positioned(
+                top: 12,
+                right: 12,
+                child: Container(
+                  height: 10,
+                  width: 10,
+                  decoration: BoxDecoration(
+                    color: green,
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+      drawer: Drawer(
+        child: ListView(
+          children: [
+            UserAccountsDrawerHeader(
+                decoration: BoxDecoration(
+                  color: black,
+                ),
+                accountName: CustomText(
+                  text: authProvider.userModel?.name,
+                  color: white,
+                  weight: FontWeight.bold,
+                  size: 18,
+                ),
+                accountEmail: CustomText(
+                  text: "email.com",
+                  color: grey,
+                  weight: FontWeight.bold,
+                  size: 18,
+                )),
+            ListTile(
+              onTap: () {},
+              leading: Icon(Icons.home),
+              title: CustomText(
+                text: "Home",
+              ),
+            ),
+            ListTile(
+              onTap: () {},
+              leading: Icon(Icons.person),
+              title: CustomText(
+                text: "Account",
+              ),
+            ),
+            ListTile(
+              onTap: () {},
+              leading: Icon(Icons.shopping_cart),
+              title: CustomText(
+                text: "Cart",
+              ),
+            ),
+          ],
+        ),
+      ),
       backgroundColor: white,
       body: SafeArea(
         child: ListView(
           children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: CustomText(
-                    text: "What are you looking for?",
-                    size: 18,
+            Container(
+              decoration: BoxDecoration(
+                color: primary,
+                borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(20),
+                    bottomRight: Radius.circular(20)),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.only(
+                    top: 8.0, left: 8.0, right: 8.0, bottom: 15),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: white,
                   ),
-                ),
-                Stack(
-                  children: [
-                    IconButton(
-                        icon: Icon(Icons.notifications_none), onPressed: () {}),
-                    Positioned(
-                      top: 12,
-                      right: 12,
-                      child: Container(
-                        height: 10,
-                        width: 10,
-                        decoration: BoxDecoration(
-                          color: red,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
+                  child: ListTile(
+                    leading: Icon(
+                      Icons.search,
+                      color: red,
+                    ),
+                    title: TextField(
+                      decoration: InputDecoration(
+                        hintText: "Find food and restaurants",
+                        border: InputBorder.none,
                       ),
                     ),
-                  ],
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 5,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: white,
-                  boxShadow: [
-                    BoxShadow(
-                        color: grey[300], offset: Offset(1, 1), blurRadius: 4)
-                  ],
-                ),
-                child: ListTile(
-                  leading: Icon(
-                    Icons.search,
-                    color: red,
-                  ),
-                  title: TextField(
-                    decoration: InputDecoration(
-                      hintText: "Find food and restaurants",
-                      border: InputBorder.none,
+                    trailing: Icon(
+                      Icons.filter_list,
+                      color: red,
                     ),
-                  ),
-                  trailing: Icon(
-                    Icons.filter_list,
-                    color: red,
                   ),
                 ),
               ),
@@ -157,7 +226,7 @@ class _HomeState extends State<Home> {
                             ),
                             // Box decoration takes a gradient
                             gradient: LinearGradient(
-                              // Where the linear gradient begins and ends
+                                // Where the linear gradient begins and ends
                                 begin: Alignment.bottomCenter,
                                 end: Alignment.topCenter,
 
@@ -178,81 +247,51 @@ class _HomeState extends State<Home> {
                   ),
                   Positioned.fill(
                       child: Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: RichText(
-                                text: TextSpan(children: [
-                                  TextSpan(
-                                      text: "Pancakes \n",
-                                      style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold)),
-                                  TextSpan(
-                                      text: "by: ",
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold)),
-                                  TextSpan(
-                                      text: "Pizza hut",
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold)),
-                                ]),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: RichText(
-                                text: TextSpan(children: [
-                                  TextSpan(
-                                    text: "\$12.99 \n",
-                                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                                  ),
-                                ]),
-                              ),
-                            ),
-                          ],
+                    alignment: Alignment.bottomCenter,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: RichText(
+                            text: TextSpan(children: [
+                              TextSpan(
+                                  text: "Pancakes \n",
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold)),
+                              TextSpan(
+                                  text: "by: ",
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold)),
+                              TextSpan(
+                                  text: "Pizza hut",
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold)),
+                            ]),
+                          ),
                         ),
-                      )),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: RichText(
+                            text: TextSpan(children: [
+                              TextSpan(
+                                text: "\$12.99 \n",
+                                style: TextStyle(
+                                    fontSize: 22, fontWeight: FontWeight.bold),
+                              ),
+                            ]),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )),
                 ],
               ),
             ),
           ],
-        ),
-      ),
-      bottomNavigationBar: Container(
-        height: 75,
-        color: white,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              BottomNavIcon(
-                image: "home.png",
-                name: "Home",
-              ),
-              BottomNavIcon(
-                image: "target.png",
-                name: "Near by",
-              ),
-              BottomNavIcon(
-                onTap: (){
-                  changeScreen(context, ShoppingBag());
-                },
-                image: "shopping-bag.png",
-                name: "Cart",
-              ),
-              BottomNavIcon(
-                image: "avatar.png",
-                name: "Account",
-              ),
-            ],
-          ),
         ),
       ),
     );

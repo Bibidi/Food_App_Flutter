@@ -7,15 +7,15 @@ class UserServices {
 
   void createUser(Map<String, dynamic> values) {
     String id = values["id"];
-    _firestore.collection(collection).document(id).setData(values);
+    _firestore.collection(collection).doc(id).set(values);
   }
 
   void updateUserData(Map<String, dynamic> values) {
-    _firestore.collection(collection).document(values["id"]).updateData(values);
+    _firestore.collection(collection).doc(values["id"]).update(values);
   }
 
   Future<UserModel> getUserById(String id) 
-  => _firestore.collection(collection).document(id).get().then((doc){
+  => _firestore.collection(collection).doc(id).get().then((doc){
     return UserModel.fromSnapshot(doc);
   });
 }
