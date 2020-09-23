@@ -1,8 +1,12 @@
+import 'dart:ffi';
+
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:food_order_app/src/helpers/screen_navigation.dart';
 import 'package:food_order_app/src/helpers/style.dart';
-import 'package:food_order_app/src/providers/auth.dart';
+import 'package:food_order_app/src/providers/category.dart';
+import 'package:food_order_app/src/providers/user.dart';
 import 'package:food_order_app/src/screens/bag.dart';
 import 'package:food_order_app/src/widgets/bottom_navigation_icon.dart';
 import 'package:food_order_app/src/widgets/categories.dart';
@@ -19,7 +23,9 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
-    final authProvider = Provider.of<AuthProvider>(context);
+    final userProvider = Provider.of<UserProvider>(context);
+    final categoryProvider = Provider.of<CategoryProvider>(context);
+
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(color: white),
@@ -78,14 +84,14 @@ class _HomeState extends State<Home> {
                   color: black,
                 ),
                 accountName: CustomText(
-                  text: authProvider.userModel?.name,
+                  text: userProvider.userModel?.name ?? "loading",
                   color: white,
                   weight: FontWeight.bold,
                   size: 18,
                 ),
                 accountEmail: CustomText(
-                  text: "email.com",
-                  color: grey,
+                  text: userProvider.userModel?.email ?? "loading",
+                  color: white,
                   weight: FontWeight.bold,
                   size: 18,
                 )),
@@ -98,9 +104,23 @@ class _HomeState extends State<Home> {
             ),
             ListTile(
               onTap: () {},
-              leading: Icon(Icons.person),
+              leading: Icon(Icons.fastfood),
               title: CustomText(
-                text: "Account",
+                text: "Food I like",
+              ),
+            ),
+            ListTile(
+              onTap: () {},
+              leading: Icon(Icons.restaurant),
+              title: CustomText(
+                text: "Liked restaurants",
+              ),
+            ),
+            ListTile(
+              onTap: () {},
+              leading: Icon(Icons.bookmark_border),
+              title: CustomText(
+                text: "My orders",
               ),
             ),
             ListTile(
@@ -108,6 +128,13 @@ class _HomeState extends State<Home> {
               leading: Icon(Icons.shopping_cart),
               title: CustomText(
                 text: "Cart",
+              ),
+            ),
+            ListTile(
+              onTap: () {},
+              leading: Icon(Icons.settings),
+              title: CustomText(
+                text: "Settings",
               ),
             ),
           ],
@@ -126,7 +153,7 @@ class _HomeState extends State<Home> {
               ),
               child: Padding(
                 padding: const EdgeInsets.only(
-                    top: 8.0, left: 8.0, right: 8.0, bottom: 15),
+                    top: 8.0, left: 8.0, right: 8.0, bottom: 10),
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
@@ -152,27 +179,98 @@ class _HomeState extends State<Home> {
               ),
             ),
             SizedBox(
+              height: 10,
+            ),
+            Container(
+              height: 100,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: categoryProvider.categories.length,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.all(6.0),
+                    child: Stack(
+                      children: [
+                        Container(
+                          width: 140,
+                          height: 160,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(30),
+                            child: Image.network(categoryProvider.categories[index].image),
+                          ),
+                        ),
+                        Container(
+                          width: 140,
+                          height: 160,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                bottomLeft: Radius.circular(30),
+                                bottomRight: Radius.circular(30),
+                              ),
+                              gradient: LinearGradient(
+                                begin: Alignment.bottomCenter,
+                                end: Alignment.topCenter,
+                                colors: [
+                                  Colors.black.withOpacity(0.6),
+                                  Colors.black.withOpacity(0.6),
+                                  Colors.black.withOpacity(0.6),
+                                  Colors.black.withOpacity(0.4),
+                                  Colors.black.withOpacity(0.1),
+                                  Colors.black.withOpacity(0.05),
+                                  Colors.black.withOpacity(0.025),
+                                ],
+                              )),
+                        ),
+                        Positioned.fill(
+                            child: Align(
+                              alignment: Alignment.center,
+                              child: CustomText(
+                                text: categoryProvider.categories[index].name,
+                                color: white,
+                                size: 26,
+                                weight: FontWeight.w300,
+                              ),
+                            ))
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ),
+            SizedBox(
               height: 5,
             ),
-            Categories(),
-            SizedBox(
-              height: 2,
-            ),
+
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: CustomText(
-                text: "Featured",
-                size: 20,
-                color: grey,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  CustomText(
+                    text: "Featured",
+                    size: 20,
+                    color: grey,
+                  ),
+
+                  CustomText(text: "see all", size: 14, color: primary,),
+                ],
               ),
             ),
             Featured(),
+
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: CustomText(
-                text: "Popular",
-                size: 20,
-                color: grey,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  CustomText(
+                    text: "Popular",
+                    size: 20,
+                    color: grey,
+                  ),
+
+                  CustomText(text: "see all", size: 14, color: primary,),
+                ],
               ),
             ),
             Padding(
@@ -223,6 +321,7 @@ class _HomeState extends State<Home> {
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.only(
                               bottomLeft: Radius.circular(20),
+                              bottomRight: Radius.circular(20),
                             ),
                             // Box decoration takes a gradient
                             gradient: LinearGradient(
@@ -252,42 +351,242 @@ class _HomeState extends State<Home> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.fromLTRB(12, 8, 8, 8),
                           child: RichText(
                             text: TextSpan(children: [
                               TextSpan(
-                                  text: "Pancakes \n",
+                                  text: "Santos Tacho \n",
                                   style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold)),
                               TextSpan(
-                                  text: "by: ",
+                                  text: "avg meal price: ",
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w300)),
+                              TextSpan(
+                                  text: "\$5.99 \n",
                                   style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold)),
-                              TextSpan(
-                                  text: "Pizza hut",
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold)),
-                            ]),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: RichText(
-                            text: TextSpan(children: [
-                              TextSpan(
-                                text: "\$12.99 \n",
-                                style: TextStyle(
-                                    fontSize: 22, fontWeight: FontWeight.bold),
-                              ),
-                            ]),
+                            ], style: TextStyle(color: white),),
                           ),
                         ),
                       ],
                     ),
                   )),
+                ],
+              ),
+            ),
+            Divider(),
+            Padding(
+              padding: const EdgeInsets.all(2.0),
+              child: Stack(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Image.asset("images/food.jpg"),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        SmallButton(Icons.favorite),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 8.0),
+                          child: Container(
+                            width: 50,
+                            decoration: BoxDecoration(
+                              color: white,
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            child: Row(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(2.0),
+                                  child: Icon(
+                                    Icons.star,
+                                    color: Colors.yellow[900],
+                                    size: 20,
+                                  ),
+                                ),
+                                Text("4.5"),
+                              ],
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  Positioned.fill(
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Container(
+                        height: 100,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(20),
+                              bottomRight: Radius.circular(20),
+                            ),
+                            // Box decoration takes a gradient
+                            gradient: LinearGradient(
+                              // Where the linear gradient begins and ends
+                                begin: Alignment.bottomCenter,
+                                end: Alignment.topCenter,
+
+                                // Add one stop for each color. Stops should increase from 0 to 1
+                                colors: [
+                                  // Colors are easy thanks to Flutter's Colors class
+                                  Colors.black.withOpacity(0.8),
+                                  Colors.black.withOpacity(0.7),
+                                  Colors.black.withOpacity(0.6),
+                                  Colors.black.withOpacity(0.6),
+                                  Colors.black.withOpacity(0.4),
+                                  Colors.black.withOpacity(0.1),
+                                  Colors.black.withOpacity(0.05),
+                                  Colors.black.withOpacity(0.025),
+                                ])),
+                      ),
+                    ),
+                  ),
+                  Positioned.fill(
+                      child: Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(12, 8, 8, 8),
+                              child: RichText(
+                                text: TextSpan(children: [
+                                  TextSpan(
+                                      text: "Santos Tacho \n",
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold)),
+                                  TextSpan(
+                                      text: "avg meal price: ",
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w300)),
+                                  TextSpan(
+                                      text: "\$5.99 \n",
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold)),
+                                ], style: TextStyle(color: white),),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )),
+                ],
+              ),
+            ),
+            Divider(),
+            Padding(
+              padding: const EdgeInsets.all(2.0),
+              child: Stack(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Image.asset("images/food.jpg"),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        SmallButton(Icons.favorite),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 8.0),
+                          child: Container(
+                            width: 50,
+                            decoration: BoxDecoration(
+                              color: white,
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            child: Row(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(2.0),
+                                  child: Icon(
+                                    Icons.star,
+                                    color: Colors.yellow[900],
+                                    size: 20,
+                                  ),
+                                ),
+                                Text("4.5"),
+                              ],
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  Positioned.fill(
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Container(
+                        height: 100,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(20),
+                              bottomRight: Radius.circular(20),
+                            ),
+                            // Box decoration takes a gradient
+                            gradient: LinearGradient(
+                              // Where the linear gradient begins and ends
+                                begin: Alignment.bottomCenter,
+                                end: Alignment.topCenter,
+
+                                // Add one stop for each color. Stops should increase from 0 to 1
+                                colors: [
+                                  // Colors are easy thanks to Flutter's Colors class
+                                  Colors.black.withOpacity(0.8),
+                                  Colors.black.withOpacity(0.7),
+                                  Colors.black.withOpacity(0.6),
+                                  Colors.black.withOpacity(0.6),
+                                  Colors.black.withOpacity(0.4),
+                                  Colors.black.withOpacity(0.1),
+                                  Colors.black.withOpacity(0.05),
+                                  Colors.black.withOpacity(0.025),
+                                ])),
+                      ),
+                    ),
+                  ),
+                  Positioned.fill(
+                      child: Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(12, 8, 8, 8),
+                              child: RichText(
+                                text: TextSpan(children: [
+                                  TextSpan(
+                                      text: "Santos Tacho \n",
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold)),
+                                  TextSpan(
+                                      text: "avg meal price: ",
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w300)),
+                                  TextSpan(
+                                      text: "\$5.99 \n",
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold)),
+                                ], style: TextStyle(color: white),),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )),
                 ],
               ),
             ),

@@ -6,7 +6,7 @@ import 'package:food_order_app/src/widgets/custom_text.dart';
 import 'package:food_order_app/src/widgets/small_floating_button.dart';
 
 class Details extends StatefulWidget {
-  final Product product;
+  final ProductModel product;
 
   Details({@required this.product});
 
@@ -81,7 +81,7 @@ class _DetailsState extends State<Details> {
                                   child: CustomText(
                                     text: "2",
                                     color: red,
-                                    size: 14,
+                                    size: 18,
                                     weight: FontWeight.bold,
                                   ),
                                 ),
@@ -107,10 +107,10 @@ class _DetailsState extends State<Details> {
                             )
                           ]),
                       child: Padding(
-                        padding: const EdgeInsets.all(4.0),
+                        padding: const EdgeInsets.all(6.0),
                         child: Icon(
                           Icons.favorite,
-                          size: 16,
+                          size: 22,
                           color: red,
                         ),
                       ),
@@ -128,7 +128,7 @@ class _DetailsState extends State<Details> {
               text: "\$" + widget.product.price.toString(),
               size: 20,
               color: red,
-              weight: FontWeight.w600,
+              weight: FontWeight.w400,
             ),
             SizedBox(height:15,),
 

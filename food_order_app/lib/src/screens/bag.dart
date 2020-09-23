@@ -9,7 +9,6 @@ class ShoppingBag extends StatefulWidget {
 }
 
 class _ShoppingBagState extends State<ShoppingBag> {
-  Product product = Product(name: "Cereals", price: 5.99, rating: 4.2, vendor: "GoodFood", wishList: true, image: "1.jpg");
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +66,8 @@ class _ShoppingBagState extends State<ShoppingBag> {
         ],
       ),
       backgroundColor: white,
-      body: ListView(
+      /* body:
+      ListView(
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.all(10.0),
@@ -110,6 +110,7 @@ class _ShoppingBagState extends State<ShoppingBag> {
           )
         ],
       ),
+      */
     );
   }
 }

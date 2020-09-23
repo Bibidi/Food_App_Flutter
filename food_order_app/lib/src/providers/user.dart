@@ -6,9 +6,9 @@ import 'package:food_order_app/src/models/user.dart';
 
 enum Status { Uninitialized, Unauthenticated, Authenticating, Authenticated }
 
-class AuthProvider with ChangeNotifier {
+class UserProvider with ChangeNotifier {
   FirebaseAuth _auth;
-  FirebaseUser _user;
+  User _user;
   Status _status = Status.Uninitialized;
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
   UserServices _userServices = UserServices();
@@ -19,7 +19,7 @@ class AuthProvider with ChangeNotifier {
 
   UserModel get userModel => _userModel;
 
-  FirebaseUser get user => _user;
+  User get user => _user;
 
   final formKey = GlobalKey<FormState>();
 
@@ -35,7 +35,7 @@ class AuthProvider with ChangeNotifier {
   함. (듣기 실력이 부족하여 정확도가 떨어짐)
    */
 
-  AuthProvider.initialize() : _auth = FirebaseAuth.instance {
+  UserProvider.initialize() : _auth = FirebaseAuth.instance {
     _auth.authStateChanges().listen(_onStateChanged);
   }
 
@@ -70,6 +70,8 @@ class AuthProvider with ChangeNotifier {
           'name': name.text,
           'email': email.text,
           'uid': result.user.uid,
+          'likedFoods': [],
+          'likedRestaurants': [],
         });
       });
       return true;
