@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:food_order_app/src/providers/category.dart';
+import 'package:food_order_app/src/providers/restaurant.dart';
 import 'package:food_order_app/src/providers/user.dart';
 import 'package:food_order_app/src/screens/home.dart';
 import 'package:food_order_app/src/screens/login.dart';
@@ -28,6 +29,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider.value(value: UserProvider.initialize()),
         ChangeNotifierProvider.value(value: CategoryProvider.initialize()),
+        ChangeNotifierProvider.value(value: RestaurantProvider.initialize()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
