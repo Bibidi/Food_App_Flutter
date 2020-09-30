@@ -12,7 +12,6 @@ import 'package:food_order_app/src/providers/user.dart';
 import 'package:food_order_app/src/screens/bag.dart';
 import 'package:food_order_app/src/screens/category.dart';
 import 'package:food_order_app/src/screens/restaurant.dart';
-import 'package:food_order_app/src/widgets/bottom_navigation_icon.dart';
 import 'package:food_order_app/src/widgets/categories.dart';
 import 'package:food_order_app/src/widgets/custom_text.dart';
 import 'package:food_order_app/src/widgets/featured_products.dart';
