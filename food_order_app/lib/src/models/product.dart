@@ -7,6 +7,7 @@ class ProductModel {
   static const RATES = "rates";
   static const IMAGE = "image";
   static const PRICE = "price";
+  static const DESCRIPTION = "description";
   static const RESTAURANT_ID = "restaurantId";
   static const RESTAURANT = "restaurant";
   static const CATEGORY = "category";
@@ -19,6 +20,7 @@ class ProductModel {
   int _rates;
   String _image;
   double _price;
+  String _description;
   String _restaurantId;
   String _restaurant;
   String _category;
@@ -32,6 +34,8 @@ class ProductModel {
   bool get featured => _featured;
 
   String get category => _category;
+
+  String get description => _description;
 
   String get restaurant => _restaurant;
 
@@ -49,10 +53,11 @@ class ProductModel {
     _id = snapshot.data()[ID];
     _name = snapshot.data()[NAME];
     _image = snapshot.data()[IMAGE];
-    _rating = snapshot.data()[RATING];
+    _rating = snapshot.data()[RATING].toDouble();
     _rates = snapshot.data()[RATES];
 
-    _price = snapshot.data()[PRICE];
+    _price = snapshot.data()[PRICE].toDouble();
+    _description = snapshot.data()[DESCRIPTION];
     _restaurantId = snapshot.data()[RESTAURANT_ID];
     _restaurant = snapshot.data()[RESTAURANT];
     _category = snapshot.data()[CATEGORY];

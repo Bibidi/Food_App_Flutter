@@ -1,27 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:food_order_app/src/helpers/screen_navigation.dart';
 import 'package:food_order_app/src/models/product.dart';
+import 'package:food_order_app/src/providers/product.dart';
 import 'package:food_order_app/src/screens/details.dart';
+import 'package:provider/provider.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 import '../helpers/style.dart';
 import 'custom_text.dart';
+import 'loading.dart';
 
-List<ProductModel> productList = [];
 
 class Featured extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final productProvider = Provider.of<ProductProvider>(context);
+
     return Container(
-      height: 240,
+      height: 220,
       child: ListView.builder(
           scrollDirection: Axis.horizontal,
-          itemCount: productList.length,
+          itemCount: productProvider.products.length,
           itemBuilder: (_, index) {
             return Padding(
               padding: const EdgeInsets.fromLTRB(12, 14, 16, 12),
               child: GestureDetector(
                 onTap: () {
-                  changeScreen(_, Details(product: productList[index],));
+                  changeScreen(_, Details(product: productProvider.products[index],));
                 },
                 child: Container(
                   height: 220,
@@ -40,9 +45,16 @@ class Featured extends StatelessWidget {
                     children: <Widget>[
                       ClipRRect(
                         borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
-                        child: Image.asset(
-                          "images/${productList[index].image}",
-                          height: 126,
+                        child: Stack(
+                          children: [
+                            Positioned.fill(child: Align(
+                              alignment: Alignment.center,
+                              child: Loading(),
+                            )),
+                            Center(
+                              child: FadeInImage.memoryNetwork(placeholder: kTransparentImage, image: productProvider.products[index].image, height: 126,),
+                            )
+                          ],
                         ),
                       ),
                       Row(
@@ -51,7 +63,7 @@ class Featured extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: CustomText(
-                              text: productList[index].name,
+                              text: productProvider.products[index].name ?? "id null",
                             ),
                           ),
                           Padding(
@@ -70,7 +82,7 @@ class Featured extends StatelessWidget {
                               child: Padding(
                                 padding: const EdgeInsets.all(4.0),
                                 child: Icon(
-                                  Icons.favorite,
+                                  Icons.favorite_border,
                                   color: red,
                                   size: 18,
                                 ),
@@ -86,7 +98,7 @@ class Featured extends StatelessWidget {
                             children: <Widget>[
                               Padding(
                                 padding: const EdgeInsets.only(left: 8.0),
-                                child: CustomText(text: productList[index].rating.toString(), color: Colors.grey, size: 14,),
+                                child: CustomText(text: productProvider.products[index].rating.toString(), color: Colors.grey, size: 14,),
                               ),
                               SizedBox(width: 2,),
                               Icon(Icons.star, color: red, size: 16,),
@@ -97,7 +109,7 @@ class Featured extends StatelessWidget {
                           ),
                           Padding(
                             padding: const EdgeInsets.only(right: 8.0,),
-                            child: CustomText(text: "\$${productList[index].price}", weight: FontWeight.bold,),
+                            child: CustomText(text: "\$${productProvider.products[index].price}", weight: FontWeight.bold,),
                           )
                         ],
                       ),

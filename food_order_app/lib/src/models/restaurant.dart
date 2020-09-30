@@ -36,8 +36,8 @@ class RestaurantModel {
     _id = snapshot.data()[ID];
     _name = snapshot.data()[NAME];
     _image = snapshot.data()[IMAGE];
-    _avgPrice = snapshot.data()[AVG_PRICE];
-    _rating = snapshot.data()[RATING];
+    _avgPrice = snapshot.data()[AVG_PRICE].toDouble();
+    _rating = snapshot.data()[RATING].toDouble();
     _rates = snapshot.data()[RATES];
     _popular = snapshot.data()[POPULAR];
   }

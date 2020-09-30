@@ -28,7 +28,7 @@ class _ShoppingBagState extends State<ShoppingBag> {
             child: Stack(
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(12.0),
                   child: Image.asset(
                     "images/shopping-bag.png",
                     width: 20,
@@ -66,9 +66,10 @@ class _ShoppingBagState extends State<ShoppingBag> {
         ],
       ),
       backgroundColor: white,
-      /* body:
+      body:
       ListView(
         children: <Widget>[
+          /*
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: Container(
@@ -108,9 +109,9 @@ class _ShoppingBagState extends State<ShoppingBag> {
               ),
             ),
           )
+           */
         ],
       ),
-      */
     );
   }
 }
