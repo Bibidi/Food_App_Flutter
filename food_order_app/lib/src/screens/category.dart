@@ -3,6 +3,7 @@ import 'package:food_order_app/src/helpers/screen_navigation.dart';
 import 'package:food_order_app/src/helpers/style.dart';
 import 'package:food_order_app/src/models/category.dart';
 import 'package:food_order_app/src/providers/product.dart';
+import 'package:food_order_app/src/screens/details.dart';
 import 'package:food_order_app/src/screens/restaurant.dart';
 import 'package:food_order_app/src/widgets/custom_text.dart';
 import 'package:food_order_app/src/widgets/loading.dart';
@@ -99,9 +100,11 @@ class CategoryScreen extends StatelessWidget {
               children: productProvider.productsByCategory
                   .map((item) => GestureDetector(
                         onTap: () {
-                          //changeScreen(context, RestaurantScreen(restaurantModel: item,))
+                          changeScreen(context, Details(product: item));
                         },
-                        child: ProductWidget(),
+                        child: ProductWidget(
+                          product: item,
+                        ),
                       ))
                   .toList(),
             )

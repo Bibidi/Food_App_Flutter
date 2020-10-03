@@ -10,6 +10,8 @@ import 'package:food_order_app/src/widgets/small_floating_button.dart';
 import 'package:provider/provider.dart';
 import 'package:transparent_image/transparent_image.dart';
 
+import 'details.dart';
+
 class RestaurantScreen extends StatelessWidget {
   final RestaurantModel restaurantModel;
 
@@ -171,9 +173,11 @@ class RestaurantScreen extends StatelessWidget {
               children: productProvider.productsByRestaurant
                   .map((item) => GestureDetector(
                 onTap: () {
-                  // changeScreen(context, RestaurantScreen(restaurantModel: item,));
+                  changeScreen(context, Details(product: item));
                 },
-                child: ProductWidget(),
+                child: ProductWidget(
+                  product: item,
+                ),
               ))
                   .toList(),
             )

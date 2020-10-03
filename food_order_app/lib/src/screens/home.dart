@@ -5,16 +5,20 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:food_order_app/src/helpers/screen_navigation.dart';
 import 'package:food_order_app/src/helpers/style.dart';
+import 'package:food_order_app/src/providers/app.dart';
 import 'package:food_order_app/src/providers/category.dart';
 import 'package:food_order_app/src/providers/product.dart';
 import 'package:food_order_app/src/providers/restaurant.dart';
 import 'package:food_order_app/src/providers/user.dart';
 import 'package:food_order_app/src/screens/bag.dart';
 import 'package:food_order_app/src/screens/category.dart';
+import 'package:food_order_app/src/screens/product_search.dart';
 import 'package:food_order_app/src/screens/restaurant.dart';
+import 'package:food_order_app/src/screens/restaurant_search.dart';
 import 'package:food_order_app/src/widgets/categories.dart';
 import 'package:food_order_app/src/widgets/custom_text.dart';
 import 'package:food_order_app/src/widgets/featured_products.dart';
+import 'package:food_order_app/src/widgets/loading.dart';
 import 'package:food_order_app/src/widgets/restaurant.dart';
 import 'package:food_order_app/src/widgets/small_floating_button.dart';
 import 'package:provider/provider.dart';
@@ -27,6 +31,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
+    final appProvider = Provider.of<AppProvider>(context);
     final userProvider = Provider.of<UserProvider>(context);
     final categoryProvider = Provider.of<CategoryProvider>(context);
     final restaurantProvider = Provider.of<RestaurantProvider>(context);
@@ -147,7 +152,7 @@ class _HomeState extends State<Home> {
         ),
       ),
       backgroundColor: white,
-      body: SafeArea(
+      body: appProvider.isLoading ? Loading() : SafeArea(
         child: ListView(
           children: <Widget>[
             Container(
@@ -171,22 +176,71 @@ class _HomeState extends State<Home> {
                       color: red,
                     ),
                     title: TextField(
+                      textInputAction: TextInputAction.search,
+                      onSubmitted: (pattern) async {
+                        appProvider.changeLoading();
+                        if (appProvider.search == SearchBy.PRODUCTS) {
+                          await productProvider.search(productName: pattern);
+                          changeScreen(context, ProductSearchScreen());
+                        }
+                        else if (appProvider.search == SearchBy.RESTAURANTS) {
+                          await restaurantProvider.search(name: pattern);
+                          changeScreen(context, RestaurantSearchScreen());
+                        }
+                        appProvider.changeLoading();
+                      },
                       decoration: InputDecoration(
                         hintText: "Find food and restaurants",
                         border: InputBorder.none,
                       ),
                     ),
-                    trailing: Icon(
-                      Icons.filter_list,
-                      color: red,
-                    ),
-                  ),
+                  )
                 ),
               ),
             ),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                CustomText(text: "Search by: ", color: grey, weight: FontWeight.w300,),
+                DropdownButton<String>(
+                  underline: Container(
+                    color: white,
+                  ),
+                  value: appProvider.filterBy,
+                  style: TextStyle(
+                    color: primary,
+                    fontWeight: FontWeight.w300
+                  ),
+                  icon: Icon(
+                      Icons.filter_list,
+                      color: primary),
+                  elevation: 0,
+                  onChanged: (value) {
+                    if (value == "Products") {
+                      appProvider.changeSearchBy(newSearchBy: SearchBy.PRODUCTS);
+                    }
+                    else if (value == "Restaurants") {
+                      appProvider.changeSearchBy(newSearchBy: SearchBy.RESTAURANTS);
+                    }
+                  },
+                  items: <String>["Products", "Restaurants"].map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+
+                ),
+              ],
+            ),
+            Divider(),
+
             SizedBox(
               height: 10,
             ),
+
+            // Category
             Container(
               height: 100,
               child: ListView.builder(
@@ -195,7 +249,9 @@ class _HomeState extends State<Home> {
                 itemBuilder: (context, index) {
                   return GestureDetector(
                     onTap: () async {
+                      // appProvider.changeLoading();
                       await productProvider.loadProductsByCategory(categoryName: categoryProvider.categories[index].name);
+                      // appProvider.changeLoading();
                       changeScreen(context, CategoryScreen(categoryModel: categoryProvider.categories[index],));
                     },
                     child: CategoryWidget(
@@ -249,7 +305,10 @@ class _HomeState extends State<Home> {
               children: restaurantProvider.restaurants
                   .map((item) => GestureDetector(
                         onTap: () async {
+                          // appProvider.changeLoading();
                           await productProvider.loadProductsByRestaurant(restaurantId: item.id);
+                          // appProvider.changeLoading();
+
                           changeScreen(context, RestaurantScreen(restaurantModel: item,));
                         },
                         child: RestaurantWidget(
