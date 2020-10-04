@@ -35,7 +35,12 @@ dependencies:
   firebase_auth: ^0.18.0+1
   provider: ^4.3.2+2
   transparent_image: ^1.0.0
+
+  # for loading animation
   flutter_spinkit: ^4.1.2+1
+
+  # for unique id
+  uuid: ^2.2.2
 
 dev_dependencies:
   flutter_test:

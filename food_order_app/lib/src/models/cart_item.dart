@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class CartModel {
+  class CartItemModel {
   static const ID = "id";
   static const PRODUCT_ID = "productId";
   static const NAME = "name";
@@ -23,12 +23,21 @@ class CartModel {
   double get price => _price;
   int get quantity => _quantity;
 
-  CartModel.fromSnapshot(DocumentSnapshot snapshot) {
-    _id = snapshot.data()[ID];
-    _productId = snapshot.data()[PRODUCT_ID];
-    _name = snapshot.data()[NAME];
-    _image = snapshot.data()[IMAGE];
-    _price = snapshot.data()[PRICE];
-    _quantity = snapshot.data()[QUANTITY];
+  CartItemModel.fromMap(Map data) {
+    _id = data[ID];
+    _productId = data[PRODUCT_ID];
+    _name = data[NAME];
+    _image = data[IMAGE];
+    _price = data[PRICE].toDouble();
+    _quantity = data[QUANTITY];
   }
+
+  Map toMap() => {
+    ID: _id,
+    IMAGE: _image,
+    NAME: _name,
+    PRODUCT_ID: _productId,
+    PRICE: _price,
+    QUANTITY: _quantity,
+  };
 }

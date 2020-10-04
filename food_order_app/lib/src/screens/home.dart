@@ -68,23 +68,23 @@ class _HomeState extends State<Home> {
                   )),
             ],
           ),
-          Stack(
-            children: [
-              IconButton(icon: Icon(Icons.notifications), onPressed: () {}),
-              Positioned(
-                top: 12,
-                right: 12,
-                child: Container(
-                  height: 10,
-                  width: 10,
-                  decoration: BoxDecoration(
-                    color: green,
-                    borderRadius: BorderRadius.circular(20.0),
-                  ),
-                ),
-              ),
-            ],
-          ),
+          // Stack(
+          //   children: [
+          //     IconButton(icon: Icon(Icons.notifications), onPressed: () {}),
+          //     Positioned(
+          //       top: 12,
+          //       right: 12,
+          //       child: Container(
+          //         height: 10,
+          //         width: 10,
+          //         decoration: BoxDecoration(
+          //           color: green,
+          //           borderRadius: BorderRadius.circular(20.0),
+          //         ),
+          //       ),
+          //     ),
+          //   ],
+          // ),
         ],
       ),
       drawer: Drawer(

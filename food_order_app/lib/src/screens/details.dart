@@ -2,8 +2,12 @@ import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
 import 'package:food_order_app/src/helpers/style.dart';
 import 'package:food_order_app/src/models/product.dart';
+import 'package:food_order_app/src/providers/app.dart';
+import 'package:food_order_app/src/providers/user.dart';
 import 'package:food_order_app/src/widgets/custom_text.dart';
+import 'package:food_order_app/src/widgets/loading.dart';
 import 'package:food_order_app/src/widgets/small_floating_button.dart';
+import 'package:provider/provider.dart';
 
 class Details extends StatefulWidget {
   final ProductModel product;
@@ -16,10 +20,15 @@ class Details extends StatefulWidget {
 
 class _DetailsState extends State<Details> {
   int quantity = 1;
+  final _key = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context);
+    final appProvider = Provider.of<AppProvider>(context);
+
     return Scaffold(
+      key: _key,
       appBar: AppBar(
         iconTheme: IconThemeData(color: black),
         backgroundColor: white,
@@ -65,13 +74,26 @@ class _DetailsState extends State<Details> {
                   }),
                 ),
                 GestureDetector(
-                  onTap: (){},
+                  onTap: () async {
+                    appProvider.changeLoading();
+                    print("All set loading");
+                    bool ok = await userProvider.addToCart(product: widget.product, quantity: quantity);
+                    if (ok) {
+                      _key.currentState.showSnackBar(
+                          SnackBar(content: Text("succeed")));
+                    }
+                    else {
+                      _key.currentState.showSnackBar(
+                          SnackBar(content: Text("failed")));
+                    }
+                    appProvider.changeLoading();
+                  },
                   child: Container(
                     decoration: BoxDecoration(
                       color: primary,
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    child: Padding(
+                    child: appProvider.isLoading ? Loading() : Padding(
                       padding: const EdgeInsets.fromLTRB(28, 12, 28, 12),
                       child: CustomText(
                         text: "Add $quantity To Cart",

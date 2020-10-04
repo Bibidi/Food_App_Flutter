@@ -2,7 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:food_order_app/src/helpers/user.dart';
+import 'package:food_order_app/src/models/product.dart';
 import 'package:food_order_app/src/models/user.dart';
+import 'package:uuid/uuid.dart';
 
 enum Status { Uninitialized, Unauthenticated, Authenticating, Authenticated }
 
@@ -104,4 +106,42 @@ class UserProvider with ChangeNotifier {
     password.text = "";
     name.text = "";
   }
+
+  Future<bool> addToCart({ProductModel product, int quantity}) async {
+    try {
+      var uuid = Uuid();
+      String cartItemId = uuid.v4();
+
+      List cart = _userModel.cart;
+      bool itemExists = false;
+      Map cartItem = {
+        "id": cartItemId,
+        "name": product.name,
+        "image": product.image,
+        "productId": product.id,
+        "price": product.price,
+        "quantity": quantity,
+      };
+
+      for (Map item in cart) {
+        if (item["productId"] == cartItem["productId"]) {
+          item["quantity"] += quantity;
+          itemExists = true;
+          break;
+        }
+      }
+
+      if (!itemExists) {
+        cart.add(cartItem);
+      }
+
+      _userServices.editCart(userId: _userModel.id, cart: cart);
+      return true;
+    } catch(e) {
+      return false;
+    }
+
+  }
+
+
 }
