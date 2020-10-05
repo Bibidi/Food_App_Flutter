@@ -10,7 +10,7 @@ import 'package:food_order_app/src/providers/category.dart';
 import 'package:food_order_app/src/providers/product.dart';
 import 'package:food_order_app/src/providers/restaurant.dart';
 import 'package:food_order_app/src/providers/user.dart';
-import 'package:food_order_app/src/screens/bag.dart';
+import 'package:food_order_app/src/screens/cart.dart';
 import 'package:food_order_app/src/screens/category.dart';
 import 'package:food_order_app/src/screens/product_search.dart';
 import 'package:food_order_app/src/screens/restaurant.dart';
@@ -52,7 +52,7 @@ class _HomeState extends State<Home> {
               IconButton(
                 icon: Icon(Icons.shopping_cart),
                 onPressed: () {
-                  changeScreen(context, ShoppingBag());
+                  changeScreen(context, CartScreen());
                 },
               ),
               Positioned(
@@ -135,10 +135,12 @@ class _HomeState extends State<Home> {
               ),
             ),
             ListTile(
-              onTap: () {},
+              onTap: () {
+                changeScreen(context, CartScreen());
+              },
               leading: Icon(Icons.shopping_cart),
               title: CustomText(
-                text: "Cart",
+                text: "Shopping Cart",
               ),
             ),
             ListTile(

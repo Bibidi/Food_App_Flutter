@@ -1,9 +1,11 @@
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
+import 'package:food_order_app/src/helpers/screen_navigation.dart';
 import 'package:food_order_app/src/helpers/style.dart';
 import 'package:food_order_app/src/models/product.dart';
 import 'package:food_order_app/src/providers/app.dart';
 import 'package:food_order_app/src/providers/user.dart';
+import 'package:food_order_app/src/screens/cart.dart';
 import 'package:food_order_app/src/widgets/custom_text.dart';
 import 'package:food_order_app/src/widgets/loading.dart';
 import 'package:food_order_app/src/widgets/small_floating_button.dart';
@@ -34,13 +36,15 @@ class _DetailsState extends State<Details> {
         backgroundColor: white,
         elevation: 0.0,
         actions: [
-          IconButton(icon: Icon(Icons.shopping_cart), onPressed: (){}),
+          IconButton(icon: Icon(Icons.shopping_cart), onPressed: (){
+            changeScreen(context, CartScreen());
+          }),
         ],
         leading: IconButton(icon: Icon(Icons.close), onPressed: () {Navigator.pop(context);},),
       ),
       backgroundColor: white,
       body: SafeArea(
-        child: Column(
+        child: appProvider.isLoading ? Loading() : Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             CircleAvatar(

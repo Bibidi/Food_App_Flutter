@@ -14,9 +14,11 @@ class UserServices {
     _firestore.collection(collection).doc(values["id"]).update(values);
   }
 
-  void editCart({String userId, List<Map> cart}) {
+  void addToCart({String userId, Map cartItem}) {
+    print("The USER ID IS: $userId");
+    print("CART ITEMS ARE: ${cartItem.toString()}");
     _firestore.collection(collection).doc(userId).update({
-      "cart": cart,
+      "cart": FieldValue.arrayUnion([cartItem])
     });
   }
 

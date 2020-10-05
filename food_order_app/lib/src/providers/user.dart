@@ -111,7 +111,6 @@ class UserProvider with ChangeNotifier {
     try {
       var uuid = Uuid();
       String cartItemId = uuid.v4();
-
       List cart = _userModel.cart;
       bool itemExists = false;
       Map cartItem = {
@@ -125,17 +124,15 @@ class UserProvider with ChangeNotifier {
 
       for (Map item in cart) {
         if (item["productId"] == cartItem["productId"]) {
-          item["quantity"] += quantity;
+          // item["quantity"] += quantity;
           itemExists = true;
           break;
         }
       }
 
       if (!itemExists) {
-        cart.add(cartItem);
+        _userServices.addToCart(userId: _user.uid, cartItem: cartItem);
       }
-
-      _userServices.editCart(userId: _userModel.id, cart: cart);
       return true;
     } catch(e) {
       return false;
