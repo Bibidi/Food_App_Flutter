@@ -12,7 +12,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
   String _productId;
   String _name;
   String _image;
-  double _price;
+  int _price;
   int _quantity;
 
   // getter
@@ -20,7 +20,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
   String get productId => _productId;
   String get name => _name;
   String get image => _image;
-  double get price => _price;
+  int get price => _price;
   int get quantity => _quantity;
 
   CartItemModel.fromMap(Map data) {

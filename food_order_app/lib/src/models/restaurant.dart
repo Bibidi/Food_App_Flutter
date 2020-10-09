@@ -12,7 +12,7 @@ class RestaurantModel {
   String _id;
   String _name;
   String _image;
-  double _avgPrice;
+  int _avgPrice;
   double _rating;
   int _rates;
   bool _popular;
@@ -24,7 +24,7 @@ class RestaurantModel {
 
   String get image => _image;
 
-  double get avgPrice => _avgPrice;
+  int get avgPrice => _avgPrice;
 
   double get rating => _rating;
 
@@ -36,7 +36,7 @@ class RestaurantModel {
     _id = snapshot.data()[ID];
     _name = snapshot.data()[NAME];
     _image = snapshot.data()[IMAGE];
-    _avgPrice = snapshot.data()[AVG_PRICE].toDouble();
+    _avgPrice = snapshot.data()[AVG_PRICE];
     _rating = snapshot.data()[RATING].toDouble();
     _rates = snapshot.data()[RATES];
     _popular = snapshot.data()[POPULAR];

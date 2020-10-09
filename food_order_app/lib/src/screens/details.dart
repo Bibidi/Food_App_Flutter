@@ -43,7 +43,7 @@ class _DetailsState extends State<Details> {
         leading: IconButton(icon: Icon(Icons.close), onPressed: () {Navigator.pop(context);},),
       ),
       backgroundColor: white,
-      body: SafeArea(
+      body: appProvider.isLoading ? Loading() : SafeArea(
         child: appProvider.isLoading ? Loading() : Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -81,14 +81,16 @@ class _DetailsState extends State<Details> {
                   onTap: () async {
                     appProvider.changeLoading();
                     print("All set loading");
+
                     bool ok = await userProvider.addToCart(product: widget.product, quantity: quantity);
                     if (ok) {
                       _key.currentState.showSnackBar(
-                          SnackBar(content: Text("succeed")));
+                          SnackBar(content: Text("Added to Cart")));
+                      userProvider.reloadUserModel();
                     }
                     else {
                       _key.currentState.showSnackBar(
-                          SnackBar(content: Text("failed")));
+                          SnackBar(content: Text("Item Not added to Cart")));
                     }
                     appProvider.changeLoading();
                   },

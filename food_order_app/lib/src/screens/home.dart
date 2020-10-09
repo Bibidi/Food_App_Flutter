@@ -12,6 +12,8 @@ import 'package:food_order_app/src/providers/restaurant.dart';
 import 'package:food_order_app/src/providers/user.dart';
 import 'package:food_order_app/src/screens/cart.dart';
 import 'package:food_order_app/src/screens/category.dart';
+import 'package:food_order_app/src/screens/login.dart';
+import 'package:food_order_app/src/screens/order.dart';
 import 'package:food_order_app/src/screens/product_search.dart';
 import 'package:food_order_app/src/screens/restaurant.dart';
 import 'package:food_order_app/src/screens/restaurant_search.dart';
@@ -113,22 +115,25 @@ class _HomeState extends State<Home> {
                 text: "Home",
               ),
             ),
+            // ListTile(
+            //   onTap: () {},
+            //   leading: Icon(Icons.fastfood),
+            //   title: CustomText(
+            //     text: "Food I like",
+            //   ),
+            // ),
+            // ListTile(
+            //   onTap: () {},
+            //   leading: Icon(Icons.restaurant),
+            //   title: CustomText(
+            //     text: "Liked restaurants",
+            //   ),
+            // ),
             ListTile(
-              onTap: () {},
-              leading: Icon(Icons.fastfood),
-              title: CustomText(
-                text: "Food I like",
-              ),
-            ),
-            ListTile(
-              onTap: () {},
-              leading: Icon(Icons.restaurant),
-              title: CustomText(
-                text: "Liked restaurants",
-              ),
-            ),
-            ListTile(
-              onTap: () {},
+              onTap: () async {
+                await userProvider.getOrders();
+                changeScreen(context, OrderScreen());
+              },
               leading: Icon(Icons.bookmark_border),
               title: CustomText(
                 text: "My orders",
@@ -140,16 +145,26 @@ class _HomeState extends State<Home> {
               },
               leading: Icon(Icons.shopping_cart),
               title: CustomText(
-                text: "Shopping Cart",
+                text: "Cart",
               ),
             ),
             ListTile(
-              onTap: () {},
-              leading: Icon(Icons.settings),
+              onTap: () {
+                userProvider.signOut();
+                changeScreenReplacement(context, LoginScreen());
+              },
+              leading: Icon(Icons.exit_to_app),
               title: CustomText(
-                text: "Settings",
+                text: "Log out",
               ),
             ),
+            // ListTile(
+            //   onTap: () {},
+            //   leading: Icon(Icons.settings),
+            //   title: CustomText(
+            //     text: "Settings",
+            //   ),
+            // ),
           ],
         ),
       ),

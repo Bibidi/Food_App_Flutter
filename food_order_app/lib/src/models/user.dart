@@ -21,6 +21,7 @@ class UserModel {
 
   // public variable
   List cart;
+  int totalCartPrice;
 
   UserModel.fromSnapshot(DocumentSnapshot snapshot) {
     _name = snapshot.data()[NAME];
@@ -28,6 +29,15 @@ class UserModel {
     _id = snapshot.data()[ID];
     _stripeId = snapshot.data()[STRIPE_ID];
     cart = snapshot.data()[CART] ?? [];
+    totalCartPrice = getTotalPrice(cart: snapshot.data()[CART]);
+  }
+
+  int getTotalPrice({List cart}) {
+    int total = 0;
+    for (Map cartItem in cart) {
+      total += cartItem["price"] * cartItem["quantity"];
+    }
+    return total;
   }
 
   // List<CartItemModel> _convertCartItems(List<Map> cart) {
@@ -37,4 +47,5 @@ class UserModel {
   //   }
   //   return convertedCart;
   // }
+
 }
