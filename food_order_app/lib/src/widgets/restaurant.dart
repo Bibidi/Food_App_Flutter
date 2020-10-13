@@ -116,7 +116,7 @@ class RestaurantWidget extends StatelessWidget {
                             style: TextStyle(
                                 fontSize: 16, fontWeight: FontWeight.w300)),
                         TextSpan(
-                            text: "\$${restaurant.avgPrice} \n",
+                            text: "\$${restaurant.avgPrice / 100} \n",
                             style: TextStyle(
                                 fontSize: 16, fontWeight: FontWeight.bold)),
                       ],

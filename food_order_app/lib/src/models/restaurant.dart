@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RestaurantModel {
-  static const ID = "id";
+  static const ID = "uid";
   static const NAME = "name";
   static const AVG_PRICE = "avgPrice";
   static const RATING = "rating";
@@ -12,7 +12,7 @@ class RestaurantModel {
   String _id;
   String _name;
   String _image;
-  int _avgPrice;
+  double _avgPrice;
   double _rating;
   int _rates;
   bool _popular;
@@ -24,7 +24,7 @@ class RestaurantModel {
 
   String get image => _image;
 
-  int get avgPrice => _avgPrice;
+  double get avgPrice => _avgPrice;
 
   double get rating => _rating;
 
@@ -36,7 +36,7 @@ class RestaurantModel {
     _id = snapshot.data()[ID];
     _name = snapshot.data()[NAME];
     _image = snapshot.data()[IMAGE];
-    _avgPrice = snapshot.data()[AVG_PRICE];
+    _avgPrice = snapshot.data()[AVG_PRICE].toDouble();
     _rating = snapshot.data()[RATING].toDouble();
     _rates = snapshot.data()[RATES];
     _popular = snapshot.data()[POPULAR];
