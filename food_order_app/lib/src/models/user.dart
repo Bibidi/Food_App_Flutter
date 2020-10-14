@@ -15,37 +15,40 @@ class UserModel {
 
   // getters
   String get name => _name;
+
   String get email => _email;
+
   String get id => _id;
+
   String get stripeId => _stripeId;
 
   // public variable
-  List cart;
-  int totalCartPrice;
+  List<CartItemModel> cart;
+  double totalCartPrice;
 
   UserModel.fromSnapshot(DocumentSnapshot snapshot) {
     _name = snapshot.data()[NAME];
     _email = snapshot.data()[EMAIL];
     _id = snapshot.data()[ID];
     _stripeId = snapshot.data()[STRIPE_ID];
-    cart = snapshot.data()[CART] ?? [];
+    cart = _convertCartItems(snapshot.data()[CART]) ?? [];
     totalCartPrice = getTotalPrice(cart: snapshot.data()[CART]);
   }
 
-  int getTotalPrice({List cart}) {
-    int total = 0;
+  double getTotalPrice({List cart}) {
+    double total = 0;
     for (Map cartItem in cart) {
       total += cartItem["price"] * cartItem["quantity"];
     }
     return total;
   }
 
-  // List<CartItemModel> _convertCartItems(List<Map> cart) {
-  //   List<CartItemModel> convertedCart = [];
-  //   for (Map cartItem in cart) {
-  //     convertedCart.add(CartItemModel.fromMap(cartItem));
-  //   }
-  //   return convertedCart;
-  // }
+  List<CartItemModel> _convertCartItems(List cart) {
+    List<CartItemModel> convertedCart = [];
+    for (Map<String, dynamic> cartItem in cart) {
+      convertedCart.add(CartItemModel.fromMap(cartItem));
+    }
+    return convertedCart;
+  }
 
 }

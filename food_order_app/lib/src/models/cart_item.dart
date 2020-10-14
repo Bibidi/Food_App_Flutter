@@ -1,30 +1,35 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-  class CartItemModel {
+class CartItemModel {
   static const ID = "id";
+  static const RESTAURANT_ID = "restaurantId";
   static const PRODUCT_ID = "productId";
   static const NAME = "name";
   static const IMAGE = "image";
   static const PRICE = "price";
   static const QUANTITY = "quantity";
 
+
   String _id;
+  String _restaurantId;
   String _productId;
   String _name;
   String _image;
-  int _price;
+  double _price;
   int _quantity;
 
   // getter
   String get id => _id;
+  String get restaurantId => _restaurantId;
   String get productId => _productId;
   String get name => _name;
   String get image => _image;
-  int get price => _price;
+  double get price => _price;
   int get quantity => _quantity;
 
   CartItemModel.fromMap(Map data) {
     _id = data[ID];
+    _restaurantId = data[RESTAURANT_ID];
     _productId = data[PRODUCT_ID];
     _name = data[NAME];
     _image = data[IMAGE];
@@ -39,5 +44,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
     PRODUCT_ID: _productId,
     PRICE: _price,
     QUANTITY: _quantity,
+    RESTAURANT_ID: _restaurantId,
   };
 }

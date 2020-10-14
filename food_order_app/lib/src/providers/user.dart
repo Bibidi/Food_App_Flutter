@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:food_order_app/src/helpers/order.dart';
 import 'package:food_order_app/src/helpers/user.dart';
+import 'package:food_order_app/src/models/cart_item.dart';
 import 'package:food_order_app/src/models/order.dart';
 import 'package:food_order_app/src/models/product.dart';
 import 'package:food_order_app/src/models/user.dart';
@@ -128,19 +129,21 @@ class UserProvider with ChangeNotifier {
         "id": cartItemId,
         "name": product.name,
         "image": product.image,
+        "restaurantId": product.restaurantId,
         "productId": product.id,
         "price": product.price,
         "quantity": quantity,
       };
 
-      _userServices.addToCart(userId: _user.uid, cartItem: cartItem);
+      CartItemModel item = CartItemModel.fromMap(cartItem);
+      _userServices.addToCart(userId: _user.uid, cartItem: item);
       return true;
     } catch(e) {
       return false;
     }
   }
 
-  Future<bool> removeFromCart({Map cartItem, int quantity}) async {
+  Future<bool> removeFromCart({CartItemModel cartItem, int quantity}) async {
     print("The PRODUCT IS: ${cartItem.toString()}");
 
     try {

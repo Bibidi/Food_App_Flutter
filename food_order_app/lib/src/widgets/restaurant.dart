@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_order_app/src/helpers/style.dart';
 import 'package:food_order_app/src/models/restaurant.dart';
+import 'package:food_order_app/src/widgets/custom_text.dart';
 import 'package:food_order_app/src/widgets/small_floating_button.dart';
 import 'package:transparent_image/transparent_image.dart';
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_order_app/src/helpers/order.dart';
 import 'package:food_order_app/src/helpers/style.dart';
+import 'package:food_order_app/src/models/cart_item.dart';
 import 'package:food_order_app/src/models/product.dart';
 import 'package:food_order_app/src/providers/app.dart';
 import 'package:food_order_app/src/providers/user.dart';
@@ -69,7 +70,7 @@ class _CartScreenState extends State<CartScreen> {
                         topLeft: Radius.circular(20),
                       ),
                       child: Image.network(
-                        userProvider.userModel.cart[index]["image"],
+                        userProvider.userModel.cart[index].image,
                         height: 120,
                         width: 140,
                         fit: BoxFit.fill,
@@ -86,7 +87,7 @@ class _CartScreenState extends State<CartScreen> {
                             text: TextSpan(children: [
                               TextSpan(
                                   text: userProvider.userModel.cart[index]
-                                          ["name"] +
+                                          .name +
                                       "\n",
                                   style: TextStyle(
                                       color: black,
@@ -94,7 +95,7 @@ class _CartScreenState extends State<CartScreen> {
                                       fontWeight: FontWeight.bold)),
                               TextSpan(
                                   text:
-                                      "\$${userProvider.userModel.cart[index]["price"].toString()}" +
+                                      "\$${userProvider.userModel.cart[index].price.toString()}" +
                                           "\n\n",
                                   style: TextStyle(
                                       color: black,
@@ -108,7 +109,7 @@ class _CartScreenState extends State<CartScreen> {
                                       fontWeight: FontWeight.w400)),
                               TextSpan(
                                   text: userProvider
-                                      .userModel.cart[index]["quantity"]
+                                      .userModel.cart[index].quantity
                                       .toString(),
                                   style: TextStyle(
                                       color: primary,
@@ -247,7 +248,7 @@ class _CartScreenState extends State<CartScreen> {
                                               cart: userProvider.userModel.cart,
                                             );
 
-                                            for (Map cartItem in userProvider.userModel.cart) {
+                                            for (CartItemModel cartItem in userProvider.userModel.cart) {
                                               await userProvider.removeFromCart(cartItem: cartItem);
                                             }
 

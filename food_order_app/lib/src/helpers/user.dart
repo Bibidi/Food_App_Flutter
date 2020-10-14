@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:food_order_app/src/models/cart_item.dart';
 import 'package:food_order_app/src/models/user.dart';
 
 class UserServices {
@@ -14,19 +15,19 @@ class UserServices {
     _firestore.collection(collection).doc(values["id"]).update(values);
   }
 
-  void addToCart({String userId, Map cartItem}) {
+  void addToCart({String userId, CartItemModel cartItem}) {
     print("The USER ID IS: $userId");
     print("CART ITEMS ARE: ${cartItem.toString()}");
     _firestore.collection(collection).doc(userId).update({
-      "cart": FieldValue.arrayUnion([cartItem])
+      "cart": FieldValue.arrayUnion([cartItem.toMap()])
     });
   }
 
-  void removeFromCart({String userId, Map cartItem}) {
+  void removeFromCart({String userId, CartItemModel cartItem}) {
     print("The USER ID IS: $userId");
     print("CART ITEMS ARE: ${cartItem.toString()}");
     _firestore.collection(collection).doc(userId).update({
-      "cart": FieldValue.arrayRemove([cartItem])
+      "cart": FieldValue.arrayRemove([cartItem.toMap()])
     });
   }
 
